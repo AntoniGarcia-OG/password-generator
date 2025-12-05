@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Password Generator</title>
+
+    <script
+      src="https://kit.fontawesome.com/6e2bc68e3d.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <main>
+      <section>
+        <h1>Password Generator</h1>
+      </section>
+      <section>
+        <div>
+          <input type="text" id="password-output" readonly />
+          <button type="button" id="copy-trigger">
+            <i class="fa-regular fa-copy"></i> Copy
+          </button>
+        </div>
+      </section>
+      <section>
+        <div>
+          <label for="length-slider">Password length</label>
+          <span id="length-value"></span>
+        </div>
+        <input type="range" id="length-slider" value="8" min="1" max="48" />
+        <ul>
+          <li>
+            <input type="checkbox" id="lowercase" checked />
+            <label for="lowercase">Include lowercase characters</label>
+          </li>
+          <li>
+            <input type="checkbox" id="uppercase" checked />
+            <label for="uppercase">Include uppercase characters</label>
+          </li>
+          <li>
+            <input type="checkbox" id="numeric" />
+            <label for="numeric">Include numeric characters</label>
+          </li>
+          <li>
+            <input type="checkbox" id="special" />
+            <label for="special">Include special characters</label>
+          </li>
+        </ul>
+        <button type="button" id="password-generation-trigger">
+          generate password
+        </button>
+      </section>
+    </main>
+
+    <script type="module" src="scripts/app.js"></script>
+  </body>
+</html>
