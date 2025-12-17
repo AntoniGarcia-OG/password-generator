@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "password-generation-trigger"
   );
 
-  const options = ["lowercase", "uppercase", "numeric", "special"];
+  const ul = document.querySelector("ul");
 
   function setPassword(password) {
     passwordOutput.value = password;
@@ -28,6 +28,8 @@ document.addEventListener("DOMContentLoaded", () => {
     return Number(lengthSlider.value);
   }
 
+  const options = ["lowercase", "uppercase", "numeric", "special"];
+
   function getOptions() {
     return options.reduce((options, currentValue) => {
       options[currentValue] = document.getElementById(currentValue).checked;
@@ -36,10 +38,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }, {});
   }
 
-  function generateAndSetNewPassword() {
+  const generateAndSetNewPassword = () => {
     const password = generatePassword(getLength(), getOptions());
+
     setPassword(password);
-  }
+  };
+
+  generateAndSetNewPassword();
 
   function afterCopyAction() {
     const icon = copyTrigger.querySelector("i");
@@ -59,13 +64,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     await navigator.clipboard.writeText(passwordOutput.value);
+
     afterCopyAction();
   });
 
   lengthSlider.addEventListener("input", setLength);
+  lengthSlider.addEventListener("input", generateAndSetNewPassword);
 
-  passwordGenerationTrigger.addEventListener(
-    "click",
-    generateAndSetNewPassword
-  );
+  ul.addEventListener("change", (ev) => {
+    if (!ev.target.matches('input[type="checkbox"]')) return;
+
+    generateAndSetNewPassword();
+  });
 });
