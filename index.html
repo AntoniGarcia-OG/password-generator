@@ -28,7 +28,22 @@
           <label for="length-slider">Password length</label>
           <span id="length-value"></span>
         </div>
-        <input type="range" id="length-slider" value="8" min="1" max="48" />
+        <div>
+          <button type="button" id="decrement-trigger">
+            <i class="fa-solid fa-minus"></i> Decrement
+          </button>
+          <input
+            type="range"
+            id="length-slider"
+            value="8"
+            min="1"
+            max="48"
+            step="1"
+          />
+          <button type="button" id="increment-trigger">
+            <i class="fa-solid fa-plus"></i> Increment
+          </button>
+        </div>
         <ul>
           <li>
             <input type="checkbox" id="lowercase" checked />

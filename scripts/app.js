@@ -8,9 +8,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const lengthSlider = document.getElementById("length-slider");
 
-  const passwordGenerationTrigger = document.getElementById(
-    "password-generation-trigger"
-  );
+  const decrementTrigger = document.getElementById("decrement-trigger");
+  const incrementTrigger = document.getElementById("increment-trigger");
 
   const ul = document.querySelector("ul");
 
@@ -58,6 +57,18 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 1000);
   }
 
+  function protectLengthSlider() {
+    const min = Number(lengthSlider.min);
+    const max = Number(lengthSlider.max);
+
+    const value = Number(lengthSlider.value);
+
+    decrementTrigger.disabled = value <= min;
+    incrementTrigger.disabled = value >= max;
+  }
+
+  protectLengthSlider();
+
   copyTrigger.addEventListener("click", async (ev) => {
     if (!passwordOutput.value) {
       return;
@@ -70,6 +81,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
   lengthSlider.addEventListener("input", setLength);
   lengthSlider.addEventListener("input", generateAndSetNewPassword);
+
+  lengthSlider.addEventListener("input", protectLengthSlider);
+
+  decrementTrigger.addEventListener("click", (ev) => {
+    lengthSlider.value = Math.max(
+      lengthSlider.min,
+      Number(lengthSlider.value) - Number(lengthSlider.step)
+    );
+
+    lengthSlider.dispatchEvent(new Event("input"));
+  });
+
+  incrementTrigger.addEventListener("click", (ev) => {
+    lengthSlider.value = Math.min(
+      lengthSlider.max,
+      Number(lengthSlider.value) + Number(lengthSlider.step)
+    );
+
+    lengthSlider.dispatchEvent(new Event("input"));
+  });
 
   ul.addEventListener("change", (ev) => {
     if (!ev.target.matches('input[type="checkbox"]')) return;
