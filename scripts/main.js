@@ -4,6 +4,8 @@ import { generatePassword } from "./generatePassword.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   const passwordOutput = document.getElementById("password-output");
+  const refreshTrigger = document.getElementById("refresh-trigger");
+
   const copyTrigger = document.getElementById("copy-trigger");
 
   const lengthValue = document.getElementById("length-value");
@@ -88,6 +90,8 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   generateAndSetNewPassword();
+
+  refreshTrigger.addEventListener("click", generateAndSetNewPassword);
 
   copyTrigger.addEventListener("click", async (ev) => {
     if (!passwordOutput.value) {
