@@ -1,3 +1,5 @@
+import { attachLongPress } from "./helpers/attachLongPress.js";
+
 import { generatePassword } from "./generatePassword.js";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -17,6 +19,18 @@ document.addEventListener("DOMContentLoaded", () => {
     passwordOutput.value = password;
   }
 
+  function afterCopyAction() {
+    const icon = copyTrigger.querySelector("i");
+
+    icon.classList.remove("fa-regular", "fa-copy");
+    icon.classList.add("fa-solid", "fa-check");
+
+    setTimeout(() => {
+      icon.classList.remove("fa-solid", "fa-check");
+      icon.classList.add("fa-regular", "fa-copy");
+    }, 1000);
+  }
+
   function setLength() {
     lengthValue.textContent = lengthSlider.value;
   }
@@ -26,6 +40,36 @@ document.addEventListener("DOMContentLoaded", () => {
   function getLength() {
     return Number(lengthSlider.value);
   }
+
+  const decrement = () => {
+    lengthSlider.value = Math.max(
+      lengthSlider.min,
+      Number(lengthSlider.value) - Number(lengthSlider.step)
+    );
+
+    lengthSlider.dispatchEvent(new Event("input"));
+  };
+
+  const increment = () => {
+    lengthSlider.value = Math.min(
+      lengthSlider.max,
+      Number(lengthSlider.value) + Number(lengthSlider.step)
+    );
+
+    lengthSlider.dispatchEvent(new Event("input"));
+  };
+
+  function protectLengthSlider() {
+    const min = Number(lengthSlider.min);
+    const max = Number(lengthSlider.max);
+
+    const value = Number(lengthSlider.value);
+
+    decrementTrigger.disabled = value <= min;
+    incrementTrigger.disabled = value >= max;
+  }
+
+  protectLengthSlider();
 
   const options = ["lowercase", "uppercase", "numeric", "special"];
 
@@ -45,30 +89,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   generateAndSetNewPassword();
 
-  function afterCopyAction() {
-    const icon = copyTrigger.querySelector("i");
-
-    icon.classList.remove("fa-regular", "fa-copy");
-    icon.classList.add("fa-solid", "fa-check");
-
-    setTimeout(() => {
-      icon.classList.remove("fa-solid", "fa-check");
-      icon.classList.add("fa-regular", "fa-copy");
-    }, 1000);
-  }
-
-  function protectLengthSlider() {
-    const min = Number(lengthSlider.min);
-    const max = Number(lengthSlider.max);
-
-    const value = Number(lengthSlider.value);
-
-    decrementTrigger.disabled = value <= min;
-    incrementTrigger.disabled = value >= max;
-  }
-
-  protectLengthSlider();
-
   copyTrigger.addEventListener("click", async (ev) => {
     if (!passwordOutput.value) {
       return;
@@ -80,27 +100,12 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   lengthSlider.addEventListener("input", setLength);
-  lengthSlider.addEventListener("input", generateAndSetNewPassword);
 
   lengthSlider.addEventListener("input", protectLengthSlider);
+  lengthSlider.addEventListener("input", generateAndSetNewPassword);
 
-  decrementTrigger.addEventListener("click", (ev) => {
-    lengthSlider.value = Math.max(
-      lengthSlider.min,
-      Number(lengthSlider.value) - Number(lengthSlider.step)
-    );
-
-    lengthSlider.dispatchEvent(new Event("input"));
-  });
-
-  incrementTrigger.addEventListener("click", (ev) => {
-    lengthSlider.value = Math.min(
-      lengthSlider.max,
-      Number(lengthSlider.value) + Number(lengthSlider.step)
-    );
-
-    lengthSlider.dispatchEvent(new Event("input"));
-  });
+  attachLongPress(decrementTrigger, decrement);
+  attachLongPress(incrementTrigger, increment);
 
   ul.addEventListener("change", (ev) => {
     if (!ev.target.matches('input[type="checkbox"]')) return;
