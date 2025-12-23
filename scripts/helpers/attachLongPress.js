@@ -23,15 +23,11 @@ export function attachLongPress(button, handler, pause = 500, delay = 50) {
     clearInterval(intervalID);
   };
 
-  button.addEventListener("mousedown", begin);
-  button.addEventListener("touchstart", function (event) {
-    event.preventDefault();
+  button.addEventListener("pointerdown", begin);
 
-    begin();
-  });
+  button.addEventListener("pointerup", end);
+  button.addEventListener("pointerleave", end);
+  button.addEventListener("pointercancel", end);
 
-  button.addEventListener("mouseup", end);
-  button.addEventListener("mouseleave", end);
-  button.addEventListener("touchend", end);
-  button.addEventListener("touchcancel", end);
+  button.addEventListener("contextmenu", (event) => event.preventDefault());
 }
